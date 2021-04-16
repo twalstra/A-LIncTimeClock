@@ -39,10 +39,12 @@ namespace TimeTrackerTutorial.PageModels.Base
             _container.Register<INavigationService, NavigationService>();
             _container.Register<IAccountService>(DependencyService.Get<IAccountService>());
             _container.Register<IStatementService, MockStatementService>();
-            _container.Register<IWorkService, MockWorkService>();
-            //_container.Register(DependencyService.Get<IRepository<WorkItem>>());
-            _container.Register(DependencyService.Get<IRepository<TestData>>());
+
+            // Register Firestore Repositories.
+            _container.Register(DependencyService.Get<IRepository<WorkItem>>());
             _container.Register(DependencyService.Get<IRepository<JobItem>>());
+            _container.Register(DependencyService.Get<IRepository<BreakItem>>());
+            _container.Register(DependencyService.Get<IRepository<MaterialItem>>());
 
             _container.Register<Services.Dialog.IAlertService, Services.Dialog.AlertService>();
         }
