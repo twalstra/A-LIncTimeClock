@@ -42,6 +42,9 @@ namespace TimeTrackerTutorial.PageModels.Base
             _container.Register<IWorkService, MockWorkService>();
             //_container.Register(DependencyService.Get<IRepository<WorkItem>>());
             _container.Register(DependencyService.Get<IRepository<TestData>>());
+            _container.Register(DependencyService.Get<IRepository<JobItem>>());
+
+            _container.Register<Services.Dialog.IAlertService, Services.Dialog.AlertService>();
         }
 
         /// <summary>

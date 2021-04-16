@@ -13,6 +13,10 @@ namespace TimeTrackerTutorial.Droid.Extensions
 
             foreach (var key in map.Keys)
             {
+                if (key.Equals("Work"))
+                {
+                    // temp breakpoint
+                }
                 var value = map[key];
                 if (value is Java.Lang.Boolean bln)
                 {
@@ -42,10 +46,37 @@ namespace TimeTrackerTutorial.Droid.Extensions
                 else if (value is System.Collections.ICollection collection)
                 {
                     var arrList = new ArrayList(collection);
-                    var list = new List<string>();
+                    var list = new List<object>();
+
                     for (var i = 0; i < arrList.Size(); i++)
                     {
-                        list.Add(arrList.Get(i).ToString());
+                        var listItem = arrList.Get(i);
+                        var hMap = listItem as System.Collections.IDictionary;
+                        if (hMap != null)
+                        {
+                            var hMapDict = new Dictionary<string, Java.Lang.Object>();
+                            foreach (var k in hMap.Keys)
+                            {
+                                System.Diagnostics.Debug.WriteLine(k);
+                                var kStr = k.ToString();
+                                Java.Lang.Object jObj = null;
+                                try
+                                {
+                                    jObj = (Java.Lang.Object)hMap[k];
+                                }
+                                catch (Exception e)
+                                {
+                                    // couldn't cast to a Java.Lang.Object for some reason..
+                                    jObj = new Java.Lang.String(hMap[k].ToString());
+                                }
+                                hMapDict.Add(kStr, jObj);
+                            }
+                            list.Add(hMapDict.ToDictionary());
+                        }
+                        else
+                        {
+                            list.Add(arrList.Get(i).ToString());
+                        }
                     }
                     dict.Add(key, list);
                 }

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
+using TimeTrackerTutorial.Models;
 using TimeTrackerTutorial.PageModels.Base;
+using TimeTrackerTutorial.Services;
 using TimeTrackerTutorial.ViewModels.Buttons;
 
 namespace TimeTrackerTutorial.PageModels
@@ -20,15 +23,26 @@ namespace TimeTrackerTutorial.PageModels
             get => _clockInModel;
             set => SetProperty(ref _clockInModel, value);
         }
-        public RecentActivityPageModel()
+
+        private IRepository<TestData> _jobsRepository;
+
+        public RecentActivityPageModel(IRepository<TestData> jobsRepository)
         {
+            _jobsRepository = jobsRepository;
 
             ViewAllModel = new ButtonModel("View All", OnViewAll);
             ClockInModel = new ButtonModel("CLOCK IN", OnClockIn);
         }
 
-        private void OnClockIn()
+        public override async Task InitializeAsync(object navigationData)
         {
+            await base.InitializeAsync(navigationData);
+
+        }
+
+        private async void OnClockIn()
+        {
+            var jobs = await _jobsRepository.GetAll();
 
         }
 

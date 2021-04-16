@@ -63,7 +63,7 @@ namespace TimeTrackerTutorial.PageModels
             {
                 // verify code that user entered.
                 var loginAttempt = await _accountService.VerifyOtpCodeAsync(Code);
-                if (loginAttempt)
+                if (loginAttempt.IsSuccess)
                 {
                     await _navigationService.NavigateToAsync<DashboardPageModel>(null, true);
                 }
