@@ -27,6 +27,7 @@
     <Folder Include="Views\SKViews\Base\" />
     <Folder Include="Views\Entries\" />
     <Folder Include="Views\Layouts\" />
+    <Folder Include="Services\Dialog\" />
   </ItemGroup>
 
   <ItemGroup>

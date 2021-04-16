@@ -48,7 +48,7 @@ namespace TimeTrackerTutorial.PageModels
         private async void DoLoginAction()
         {
             var loginAttempt = await _accountService.LoginAsync(Username, Password);
-            if (loginAttempt)
+            if (loginAttempt.IsSuccess)
             {
                 // navigate to the Dashboard.
                 await _navigationService.NavigateToAsync<DashboardPageModel>();

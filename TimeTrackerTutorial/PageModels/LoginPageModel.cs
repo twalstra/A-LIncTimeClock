@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using TimeTrackerTutorial.PageModels.Base;
 using TimeTrackerTutorial.Services.Account;
+using TimeTrackerTutorial.Services.Dialog;
 using TimeTrackerTutorial.Services.Navigation;
 using TimeTrackerTutorial.ViewModels;
 using TimeTrackerTutorial.ViewModels.Buttons;
@@ -24,12 +26,14 @@ namespace TimeTrackerTutorial.PageModels
         public ButtonModel LogInModel { get; set; }
         public ButtonModel UsePhoneModel { get; set; }
 
+        private IAlertService _alertService;
         private IAccountService _accountService;
         private INavigationService _navigationService;
 
         public LoginPageModel(INavigationService navigationService,
-            IAccountService accountService)
+            IAccountService accountService, IAlertService alertService)
         {
+            _alertService = alertService;
             _accountService = accountService;
             _navigationService = navigationService;
             EmailEntryViewModel = new LoginEntryViewModel("email", false);
@@ -40,10 +44,19 @@ namespace TimeTrackerTutorial.PageModels
             UsePhoneModel = new ButtonModel("USE PHONE NUMBER", GoToPhoneLogin);
         }
 
+        public override async Task InitializeAsync(object navigationData)
+        {
+            await base.InitializeAsync(navigationData);
+            if (await _accountService.GetUserAsync() != null)
+            {
+                await _navigationService.NavigateToAsync<RecentActivityPageModel>();
+            }
+        }
+
         private async void OnLogin()
         {
             var loginAttempt = await _accountService.LoginAsync(EmailEntryViewModel.Text, PasswordEntryViewModel.Text);
-            if (loginAttempt)
+            if (loginAttempt.IsSuccess)
             {
                 // navigate to the Dashboard.
                 await _navigationService.NavigateToAsync<RecentActivityPageModel>();
@@ -51,6 +64,7 @@ namespace TimeTrackerTutorial.PageModels
             else
             {
                 // TODO: Display an Alert for Failure!
+                await _alertService.AlertAsync("Error", loginAttempt.ErrorMessage, "Ok");
             }
         }
 

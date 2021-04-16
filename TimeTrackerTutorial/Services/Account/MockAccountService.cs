@@ -18,13 +18,13 @@ namespace TimeTrackerTutorial.Services.Account
             throw new NotImplementedException();
         }
 
-        public Task<bool> LoginAsync(string username, string password)
+        public Task<LoginResult> LoginAsync(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                return Task.FromResult(false);
+                return Task.FromResult(LoginResult.FromError("username or password is missing"));
             }
-            return Task.Delay(1000).ContinueWith((task) => true);
+            return Task.Delay(1000).ContinueWith((task) => LoginResult.FromSuccess());
         }
 
         public Task<bool> SendOtpCodeAsync(string phoneNumber)
@@ -32,7 +32,7 @@ namespace TimeTrackerTutorial.Services.Account
             throw new NotImplementedException();
         }
 
-        public Task<bool> VerifyOtpCodeAsync(string code)
+        public Task<LoginResult> VerifyOtpCodeAsync(string code)
         {
             throw new NotImplementedException();
         }

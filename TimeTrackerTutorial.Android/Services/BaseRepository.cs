@@ -66,5 +66,16 @@ namespace TimeTrackerTutorial.Droid.Services
 
             return tcs.Task;
         }
+
+        public Task<string> Update(T item)
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            FirebaseFirestore.Instance
+                .Document(DocumentPath + "/" + item.Id)
+                .Update(item.Convert());
+
+            return tcs.Task;
+        }
     }
 }

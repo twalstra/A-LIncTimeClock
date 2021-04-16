@@ -32,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -88,6 +89,10 @@
     <Compile Include="ServiceListeners\OnCreateCompleteListener.cs" />
     <Compile Include="ServiceListeners\OnDeleteCompleteListener.cs" />
     <Compile Include="Renderers\PlainEntryRenderer.cs" />
+    <Compile Include="Services\JobRepository.cs" />
+    <Compile Include="Services\WorkRepository.cs" />
+    <Compile Include="Services\BreakRepository.cs" />
+    <Compile Include="Services\MaterialRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

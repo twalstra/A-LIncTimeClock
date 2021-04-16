@@ -29,10 +29,10 @@ namespace TimeTrackerTutorial.Droid.Services
             return Task.FromResult(10d);
         }
 
-        public Task<bool> LoginAsync(string username, string password)
+        public Task<LoginResult> LoginAsync(string username, string password)
         {
-            var tcs = new TaskCompletionSource<bool>();
-            FirebaseAuth.Instance.SignInWithEmailAndPasswordAsync(username, password)
+            var tcs = new TaskCompletionSource<LoginResult>();
+            FirebaseAuth.Instance.SignInWithEmailAndPasswordAsync(username.Trim(), password)
                 .ContinueWith((task) => OnAuthCompleted(task, tcs));
             return tcs.Task;
         }
@@ -67,29 +67,29 @@ namespace TimeTrackerTutorial.Droid.Services
             return _phoneAuthTcs.Task;
         }
 
-        private void OnAuthCompleted(Task task, TaskCompletionSource<bool> tcs)
+        private void OnAuthCompleted(Task task, TaskCompletionSource<LoginResult> tcs)
         {
             if (task.IsCanceled || task.IsFaulted)
             {
                 // something went wrong
-                tcs.SetResult(false);
+                tcs.SetResult(LoginResult.FromError(task.Exception?.Message ?? "Canceled, look into this (TODO)"));
                 return;
             }
             _verificationId = null;
-            tcs.SetResult(true);
+            tcs.SetResult(LoginResult.FromSuccess());
         }
 
-        public Task<bool> VerifyOtpCodeAsync(string code)
+        public Task<LoginResult> VerifyOtpCodeAsync(string code)
         {
             if (!string.IsNullOrWhiteSpace(_verificationId))
             {
                 var credential = PhoneAuthProvider.GetCredential(_verificationId, code);
-                var tcs = new TaskCompletionSource<bool>();
+                var tcs = new TaskCompletionSource<LoginResult>();
                 FirebaseAuth.Instance.SignInWithCredentialAsync(credential)
                     .ContinueWith((task) => OnAuthCompleted(task, tcs));
                 return tcs.Task;
             }
-            return Task.FromResult(false);
+            return Task.FromResult(LoginResult.FromError("Verfication ID is null"));
         }
 
         public Task<AuthenticatedUser> GetUserAsync()
