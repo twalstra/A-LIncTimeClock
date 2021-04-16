@@ -9,7 +9,5 @@ namespace TimeTrackerTutorial.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public double Rate { get; set; }
-
-        public List<WorkItem> Work { get; set; }
     }
 }

@@ -23,25 +23,16 @@ namespace TimeTrackerTutorial.Models
 
     public class WorkItem : IIdentifiable
     {
+        public string JobId { get; set; }
+        public string JobName { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-
-        public List<BreakItem> Breaks { get; set; }
-        public List<MaterialItem> Materials { get; set; }
-
         public TimeSpan Total
         {
             get
             {
                 // Return End - Start, less any break time.
                 var total = End - Start;
-                if (Breaks != null)
-                {
-                    foreach (var b in Breaks)
-                    {
-                        total -= (b.End - b.Start);
-                    }
-                }
                 return total;
             }
         }
